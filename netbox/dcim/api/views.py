@@ -545,6 +545,29 @@ class ModuleViewSet(NetBoxModelViewSet):
     serializer_class = serializers.ModuleSerializer
     filterset_class = filtersets.ModuleFilterSet
 
+    _adopt_components = Parameter(
+        name='adopt_components',
+        in_='query',
+        description='Adopt already existing components',
+        required=False,
+        default=False,
+        type=openapi.TYPE_BOOLEAN
+    )
+    _disable_replication = Parameter(
+        name='disable_replication',
+        in_='query',
+        description='Automatically populate components associated with this module type',
+        required=False,
+        default=False,
+        type=openapi.TYPE_BOOLEAN
+    )
+
+    @swagger_auto_schema(
+        manual_parameters=[_adopt_components, _disable_replication],
+    )
+    def create(self, request, *args, **kwargs):
+        return super().create(request, *args, **kwargs)
+
 
 #
 # Device components

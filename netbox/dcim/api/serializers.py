@@ -674,6 +674,13 @@ class ModuleSerializer(NetBoxModelSerializer):
     module_bay = NestedModuleBaySerializer()
     module_type = NestedModuleTypeSerializer()
 
+    def create(self, validated_data):
+        instance = Module(**validated_data)
+        instance._adopt_components = self.context['request'].GET.get('adopt_components', False) == 'true'
+        instance._disable_replication = self.context['request'].GET.get('disable_replication', False) == 'true'
+        instance.save()
+        return instance
+
     class Meta:
         model = Module
         fields = [
